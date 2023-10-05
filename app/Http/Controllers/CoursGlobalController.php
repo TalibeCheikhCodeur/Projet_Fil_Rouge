@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cours_global;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreCours_globalRequest;
 use App\Http\Requests\UpdateCours_globalRequest;
-use App\Models\Cours_global;
+use App\Models\CoursGlobalClasse;
+use Symfony\Component\HttpFoundation\Response;
 
 class CoursGlobalController extends Controller
 {
@@ -29,7 +32,28 @@ class CoursGlobalController extends Controller
      */
     public function store(StoreCours_globalRequest $request)
     {
-        
+        $coursGlobal = [
+            'module_id' => $request->module_id,
+            'semestre_id' => $request->semestre_id,
+            'professeur_id' => $request->professeur_id,
+            'etat' => $request->etat
+        ];
+
+        DB::beginTransaction();
+        $insertCours = Cours_global::create($coursGlobal);
+        $classeIds= $request->classe_ids;
+        foreach ($classeIds as $classeId) {
+            $coursGlobalClasse = [
+                'cours_global_id' => $insertCours->id,
+                'classe_id' => $classeId,
+                'nombre_heures' => $request->nombre_heures,
+                'nombre_heures_effectues' => 0
+            ];
+            $insertCoursClasse = CoursGlobalClasse::create($coursGlobalClasse);
+        }
+        DB::commit();
+
+        return Response()->json(['Ajout reussi']);
     }
 
     /**

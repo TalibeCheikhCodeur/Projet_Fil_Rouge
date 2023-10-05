@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CoursGlobalController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\SemestreController;
@@ -20,7 +22,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::apiResource('modules',ModuleController::class);
-Route::apiResource('profs',ProfesseurController::class);
-Route::apiResource('semestres',SemestreController::class);
+Route::post('login', [AuthController::class, 'login']);
+Route::get('logout', [AuthController::class, 'logout']);
+Route::apiResource('modules', ModuleController::class);
+Route::apiResource('profs', ProfesseurController::class);
+Route::apiResource('semestres', SemestreController::class);
+Route::apiResource('cours', CoursGlobalController::class);
