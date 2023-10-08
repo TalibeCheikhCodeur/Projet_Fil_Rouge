@@ -11,7 +11,7 @@ class StoreEtidiantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class StoreEtidiantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "nom" => $this->nom,
+            "prenom" => $this->prenom,
+            "date_naiss" => $this->date_naiss,
+            "lieu_naiss" => $this->lieu_naiss,
+            "telephone" => $this->telephone,
+            "adresse" => $this->nom,
         ];
     }
 }

@@ -41,11 +41,12 @@ class CoursGlobalController extends Controller
 
         DB::beginTransaction();
         $insertCours = Cours_global::create($coursGlobal);
-        $classeIds= $request->classe_ids;
-        foreach ($classeIds as $classeId) {
+        $classes= $request->classes;
+        
+        foreach ($classes as $classe) {
             $coursGlobalClasse = [
                 'cours_global_id' => $insertCours->id,
-                'classe_id' => $classeId,
+                'classe_id' => $classe['classe'],
                 'nombre_heures' => $request->nombre_heures,
                 'nombre_heures_effectues' => 0
             ];

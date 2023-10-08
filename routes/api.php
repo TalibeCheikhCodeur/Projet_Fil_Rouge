@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\CoursGlobalController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProfesseurController;
@@ -28,3 +29,4 @@ Route::apiResource('modules', ModuleController::class);
 Route::apiResource('profs', ProfesseurController::class);
 Route::apiResource('semestres', SemestreController::class);
 Route::apiResource('cours', CoursGlobalController::class);
+Route::apiResource('classes',ClasseController::class);

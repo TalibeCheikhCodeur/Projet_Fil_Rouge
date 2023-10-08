@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClasseRequest;
 use App\Http\Requests\UpdateClasseRequest;
+use App\Http\Resources\ClasseResource;
 use App\Models\Classe;
 
 class ClasseController extends Controller
@@ -13,7 +14,8 @@ class ClasseController extends Controller
      */
     public function index()
     {
-        //
+        $classe= new Classe();
+        return ClasseResource::collection($classe->all());
     }
 
     /**

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Etidiant;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreEtidiantRequest;
 use App\Http\Requests\UpdateEtidiantRequest;
-use App\Models\Etidiant;
+use App\Models\AnneeScolaire;
+use App\Models\Classe;
 
 class EtidiantController extends Controller
 {
@@ -29,7 +32,31 @@ class EtidiantController extends Controller
      */
     public function store(StoreEtidiantRequest $request)
     {
-        //
+        $etudiants = [
+            "nom" => $request->nom,
+            "prenom" => $request->prenom,
+            "date_naiss" => $request->date_naiss,
+            "lieu_naiss" => $request->lieu_naiss,
+            "telephone" => $request->telephone,
+            "adresse" => $request->nom,
+        ];
+
+        DB::beginTransaction();
+        $insertEtud = Etidiant::create($etudiants);
+
+        $classe = $request->classe;
+        $annee_scolaire = $request->annee_scolaire;
+
+        $classe_id = Classe::where('libelle', $classe)->first();
+        $annee_scolaire_id = AnneeScolaire::where('libelle', $annee_scolaire);
+
+        $inscrits = [
+            "classe_id" => $classe_id,
+            "annee_scolaire_id" => $annee_scolaire_id,
+            "etidiant_id" => $insertEtud->id
+        ];
+
+        
     }
 
     /**
