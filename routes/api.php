@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\CoursGlobalController;
+use App\Http\Controllers\EtidiantController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\SemestreController;
@@ -30,3 +31,4 @@ Route::apiResource('profs', ProfesseurController::class);
 Route::apiResource('semestres', SemestreController::class);
 Route::apiResource('cours', CoursGlobalController::class);
 Route::apiResource('classes',ClasseController::class);
+Route::apiResource('inscris',EtidiantController::class);

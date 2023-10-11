@@ -8,6 +8,7 @@ use App\Http\Requests\StoreEtidiantRequest;
 use App\Http\Requests\UpdateEtidiantRequest;
 use App\Models\AnneeScolaire;
 use App\Models\Classe;
+use App\Models\Inscription;
 
 class EtidiantController extends Controller
 {
@@ -32,31 +33,42 @@ class EtidiantController extends Controller
      */
     public function store(StoreEtidiantRequest $request)
     {
-        $etudiants = [
-            "nom" => $request->nom,
-            "prenom" => $request->prenom,
-            "date_naiss" => $request->date_naiss,
-            "lieu_naiss" => $request->lieu_naiss,
-            "telephone" => $request->telephone,
-            "adresse" => $request->nom,
-        ];
-
+        $idAnnee = AnneeScolaire::where('etat', 'en cours')->first()->id;
+        $etudiants = $request->all();
+        $etudiant = $etudiants['tab'];
+        $etudiantsExist = Etidiant::all()->toArray();
         DB::beginTransaction();
-        $insertEtud = Etidiant::create($etudiants);
+        foreach ($etudiant as $et) {
+            $apprenant = Etidiant::where('telephone', $et['telephone'])->first();
+            if ($apprenant == null) {
 
-        $classe = $request->classe;
-        $annee_scolaire = $request->annee_scolaire;
+                $newApprenant = Etidiant::create([
+                    "nom" => $et['nom'],
+                    "prenom" => $et['prenom'],
+                    "date_de_naiss" => $et['date_de_naiss'],
+                    "lieu_de_naiss" => $et['lieu_de_naiss'],
+                    "adresse" => $et['adresse'],
+                    "telephone" => $et['telephone'],
+                    "nouveau" => $et['nouveau']
+                ]);
+                $idClasse = Classe::where('libelle', $et['classe'])->first()->id;
+                Inscription::create([
+                    "classe_id" => $idClasse,
+                    "etidiant_id" => $newApprenant->id,
+                    "annee_scolaire_id" => $idAnnee
+                ]);
+            } elseif ($apprenant != null) {
 
-        $classe_id = Classe::where('libelle', $classe)->first();
-        $annee_scolaire_id = AnneeScolaire::where('libelle', $annee_scolaire);
-
-        $inscrits = [
-            "classe_id" => $classe_id,
-            "annee_scolaire_id" => $annee_scolaire_id,
-            "etidiant_id" => $insertEtud->id
-        ];
-
-        
+                $idClasse = Classe::where('libelle', $et['classe'])->first()->id;
+                Inscription::create([
+                    "classe_id" => $idClasse,
+                    "etidiant_id" => $apprenant->id,
+                    "annee_scolaire_id" => $idAnnee
+                ]);
+            }
+            DB::commit();
+        }
+        return response(['message' => 'incription réussi']);
     }
 
     /**
