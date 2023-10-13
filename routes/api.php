@@ -7,6 +7,7 @@ use App\Http\Controllers\EtidiantController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\SemestreController;
+use App\Http\Controllers\SessionCourController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,3 +33,4 @@ Route::apiResource('semestres', SemestreController::class);
 Route::apiResource('cours', CoursGlobalController::class);
 Route::apiResource('classes',ClasseController::class);
 Route::apiResource('inscris',EtidiantController::class);
+Route::apiResource('sessions',SessionCourController::class);
