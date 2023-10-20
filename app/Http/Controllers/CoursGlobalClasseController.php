@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCoursGlobalClasseRequest;
 use App\Http\Requests\UpdateCoursGlobalClasseRequest;
+use App\Http\Resources\CoursGlobalClasseResource;
 use App\Models\CoursGlobalClasse;
 
 class CoursGlobalClasseController extends Controller
@@ -13,7 +14,9 @@ class CoursGlobalClasseController extends Controller
      */
     public function index()
     {
-        //
+        
+        $coursClasse = CoursGlobalClasse::all();
+        return CoursGlobalClasseResource::collection($coursClasse);
     }
 
     /**

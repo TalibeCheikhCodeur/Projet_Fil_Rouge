@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSalleRequest;
 use App\Http\Requests\UpdateSalleRequest;
+use App\Http\Resources\SalleResource;
 use App\Models\Salle;
 
 class SalleController extends Controller
@@ -13,7 +14,8 @@ class SalleController extends Controller
      */
     public function index()
     {
-        //
+        $salle = new Salle();
+        return SalleResource::collection($salle->all());
     }
 
     /**

@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
+
+
     public function login(Request $request)
     {
 
@@ -17,7 +20,7 @@ class AuthController extends Controller
                 "message" => "Invalid credentials"
             ], Response::HTTP_UNAUTHORIZED);
         }
-        $user = Auth::utilisateur();
+        $user = Auth::user();
         $token = $user->createToken("token")->plainTextToken;
         $cookie = cookie("token", $token, 24 * 60);
 
@@ -32,5 +35,6 @@ class AuthController extends Controller
         Auth::logout();
         Cookie::forget("token");
 
-        return response([
+        return response()->json(['message' => "deconnection avec succes"]);
+    }
 }

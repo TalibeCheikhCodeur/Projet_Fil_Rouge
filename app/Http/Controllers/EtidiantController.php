@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Classe;
 use App\Models\Etidiant;
+use App\Models\Inscription;
+use App\Models\AnneeScolaire;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreEtidiantRequest;
 use App\Http\Requests\UpdateEtidiantRequest;
-use App\Models\AnneeScolaire;
-use App\Models\Classe;
-use App\Models\Inscription;
 
 class EtidiantController extends Controller
 {
@@ -38,6 +39,7 @@ class EtidiantController extends Controller
         $etudiant = $etudiants['tab'];
         $etudiantsExist = Etidiant::all()->toArray();
         DB::beginTransaction();
+        $i = 1;
         foreach ($etudiant as $et) {
             $apprenant = Etidiant::where('telephone', $et['telephone'])->first();
             if ($apprenant == null) {
@@ -65,7 +67,17 @@ class EtidiantController extends Controller
                     "etidiant_id" => $apprenant->id,
                     "annee_scolaire_id" => $idAnnee
                 ]);
+                
+                User::create([
+                    "login" => "etudiant"." ".$i,
+                    "password" => "Etudiant",
+                    "name" => $et['prenom'],
+                    "email"=> "etudiant".$i."@gmail.com",
+                    "role"=> 'etudiant'
+                ]);
+                $i=$i+1;
             }
+
             DB::commit();
         }
         return response(['message' => 'incription réussi']);
